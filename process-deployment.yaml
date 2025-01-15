@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: process-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: process
+  template:
+    metadata:
+      labels:
+        app: process
+    spec:
+      containers:
+        - name: process
+          image: alpine:3.20
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "1"
+          command: ["/bin/sh"]
+          args: ["-c", "/app/process/entrypoint.sh"]
+          volumeMounts:
+            - mountPath: /app
+              name: demo1-volume
+          workingDir: /app
+          env:
+            - name: RABBITMQ_SERVICE_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+      volumes:
+        - name: demo1-volume
+          hostPath:
+            path: /demo1
+            type: Directory

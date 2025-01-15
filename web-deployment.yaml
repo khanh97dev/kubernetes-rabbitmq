@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+        - name: alpine
+          image: alpine:3.20
+          resources:
+            limits:
+              memory: "2Gi"
+              cpu: "2"
+          command: ["/bin/sh"]
+          args: ["-c", "/app/web/entrypoint.sh"]
+          volumeMounts:
+            - mountPath: /app
+              name: demo1-volume
+          ports:
+            - containerPort: 8000
+              hostPort: 8000 # kind-config.yaml | containerPort: 8000
+          env:
+            - name: RABBITMQ_SERVICE_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+      volumes:
+        - name: demo1-volume
+          hostPath:
+            path: /demo1
+            type: Directory
+  strategy:
+    type: Recreate

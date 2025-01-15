@@ -1,0 +1,13 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: demo1
+nodes:
+  - role: control-plane
+    extraMounts:
+      - hostPath: /root/kubernetes/demo1
+        containerPath: /demo1
+    extraPortMappings:
+      - hostPort: 8000
+        containerPort: 8000
+        listenAddress: "127.0.0.1"
+        protocol: TCP
