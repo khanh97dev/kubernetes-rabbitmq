@@ -18,7 +18,7 @@ sudo mv ./kind /usr/local/bin/
 kind create cluster --config kind-config.yaml
 ```
 - Delete
-name: kind-config.yaml | name: ...
+    - name: kind-config.yaml | name: ...
 ```
 kind delete cluster --name {kind-demo}
 ```
